@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarot Deck</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tarot Deck</h1>
+    <p>Below is the list of tarot cards. Click on a card to view its details.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Card Name</th>
+                <th>Type</th>
+                <th>Upright Meaning</th>
+                <th>Reversed Meaning</th>
+            </tr>
+        </thead>
+        <tbody id="cardTable">
+            <!-- Dynamic content populated by JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        // Fetch and display card data
+        fetch('tarot_deck.txt')
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.trim().split("\n\n"); // Split cards by blank line
+                const table = document.getElementById("cardTable");
+                rows.forEach(row => {
+                    const lines = row.split("\n");
+                    const card = {
+                        name: lines[0].replace("Card Name: ", ""),
+                        type: lines[1].replace("Type: ", ""),
+                        description: lines[2].replace("Description: ", ""),
+                        upright: lines[3].replace("Upright Meaning: ", ""),
+                        reversed: lines[4].replace("Reversed Meaning: ", "")
+                    };
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${card.name}</td>
+                        <td>${card.type}</td>
+                        <td>${card.upright}</td>
+                        <td>${card.reversed}</td>
+                    `;
+                    table.appendChild(tr);
+                });
+            })
+            .catch(err => console.error("Error loading tarot deck:", err));
+    </script>
+</body>
+</html>
